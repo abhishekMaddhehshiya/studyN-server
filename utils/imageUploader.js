@@ -15,3 +15,4 @@ const uploadImageToCloudinary = async (file,folder,height, quality )=>{
 }
 
 export default uploadImageToCloudinary
+

@@ -5,8 +5,46 @@ import bcrypt from "bcrypt"
 import Profile from "../models/Profile.js";
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv";
+import otpGenerator from "otp-generator"
+import Otp from "../models/Otp.js";
 dotenv.config();
 
+export const sendOTP = async (req, res)=>{
+    try{
+        const {email} = req.body;
+
+        const existingUser = await User.findOne({email});
+        
+        if(existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: "User is already registerd"
+            })
+        }
+
+        var otp = otpGenerator.generate(6, {
+            upperCaseAlphabets:false,
+            lowerCaseAlphabets: false,
+            specialChars: false,
+        })
+        
+        const otpPayload = {email , otp};
+        const otpBody = await Otp.create(otpPayload);
+
+        console.log(otpBody);
+        return res.status(201).json({
+            success:true,
+            message: "OTP created successfully",
+        })
+
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "send otp faild",
+        })
+    }
+}
 
 export const signup = async (req, res) => {
 
@@ -19,9 +57,10 @@ export const signup = async (req, res) => {
             confirmPassword,
             accountType,
             contactNumber,
+            otp
         } = req.body;
 
-        if (!firstName || !lastName || !email || !password || !confirmPassword) {
+        if (!firstName || !lastName || !email || !password || !confirmPassword || !otp) {
             return res.status(403).json({
                 success: false,
                 message: "All fields are required",
@@ -35,15 +74,25 @@ export const signup = async (req, res) => {
             })
         }
 
+        
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({
                 success: false,
                 message: "User already exists",
             })
-
+            
         }
+        
+        const dbotp = await Otp.find({email}).sort({createdAt: -1}).limit(1);
+        console.log(dbotp)
 
+        if(dbotp.length === 0 || dbotp[0].otp !== otp){
+            return res.status(401).json({
+                success: false,
+                message: "invalid otp"
+            })
+        }
 
         const hashPassword = await bcrypt.hash(password, 10);
 
@@ -100,7 +149,7 @@ export const login = async (req, res) => {
         if (!user) {
             return res.status(401).json({
                 success: false,
-                message: "User doesn`t exists. Please Signup first",
+                message: "Incorrect Email or Password",
             })
         }
 
@@ -108,7 +157,7 @@ export const login = async (req, res) => {
         if (!passwordValidation) {
             return res.status(500).json({
                 success: false,
-                message: "Incorrect Password",
+                message: "Incorrect Email or Password",
             })
         }
 

@@ -23,8 +23,13 @@ export const createSection = async (req, res) => {
                     courseContent: newSection._id,
                 }
             },
-            { new: true, }
-        )
+            { new: true }
+        ).populate({
+            path: "courseContent",
+            populate:{
+                path: "subSection",
+            }
+        })
 
         return res.status(200).json({
             success: true,
@@ -55,8 +60,9 @@ export const updateSection = async (req, res) => {
         const updatedDetails = await Section.findByIdAndUpdate(
             sectionId,
             { sectionName: sectionName },
-            { new: true },
-        );
+            { new: true }
+        ).populate("subSection");
+        
 
         return res.status(200).json({
             success: true,
@@ -91,7 +97,12 @@ export const deleteSection = async (req,res)=>{
             $pull: {
                 courseContent: sectionId,
             }
-        }, {new: true})
+        }, {new: true}).populate({
+            path: "courseContent",
+            populate:{
+                path: "subSection",
+            }
+        })
 
 
         return res.status(200).json({
