@@ -18,7 +18,7 @@ export const createRating = async (req,res)=>{
             })
         }
 
-        const alreadyReviewed = await RatingAndReview.findOne({
+        const alreadyReviewed = await RatingsAndReview.findOne({
             user:userId,
             course: courseId,
         })
@@ -108,6 +108,7 @@ export const getAllRating = async(req,res)=>{
 
         const allReviews = await RatingsAndReview.find({})
                                             .sort({rating: "desc"})
+                                            .limit(10)
                                             .populate({
                                                 path: "user",
                                                 select: "firstName lastName email image"
