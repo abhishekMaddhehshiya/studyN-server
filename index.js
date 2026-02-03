@@ -18,7 +18,7 @@ cloudinaryConnect()
 app.use(express.json());
 app.use( cookieParser())
 app.use(cors({
-  origin: 'http://localhost:5173', // frontend URL
+  origin: ['http://localhost:5173', 'http://study-n-frontend.vercel.app/'], // frontend URLs
   credentials: true // if you’re using cookies or sessions
 }));
 app.use(fileUpload({
