@@ -24,7 +24,7 @@ export const createCategory = async (req,res)=>{
 
 
     }catch(error){
-        console.log(error);
+     
         return res.status(403).json({
             success: false,
             message: "Error while creating Category",
@@ -71,7 +71,7 @@ export const categoryPageDetails = async (req,res)=>{
       //console.log("SELECTED COURSE", selectedCategory)
       // Handle the case when the category is not found
       if (!selectedCategory) {
-        console.log("Category not found.")
+        
         return res
           .status(404)
           .json({ success: false, message: "Category not found" })

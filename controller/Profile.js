@@ -215,7 +215,7 @@ export const instrustorDashboard = async (req,res)=>{
 
     res.status(200).json({ success: true, courses: courseData })
   } catch (error) {
-    console.error(error)
+   
     res.status(500).json({ message: "Server Error" })
   }
 }

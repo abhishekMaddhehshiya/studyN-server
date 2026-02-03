@@ -31,7 +31,7 @@ export const sendOTP = async (req, res)=>{
         const otpPayload = {email , otp};
         const otpBody = await Otp.create(otpPayload);
 
-        console.log(otpBody);
+        
         return res.status(201).json({
             success:true,
             message: "OTP created successfully",
@@ -85,7 +85,7 @@ export const signup = async (req, res) => {
         }
         
         const dbotp = await Otp.find({email}).sort({createdAt: -1}).limit(1);
-        console.log(dbotp)
+    
 
         if(dbotp.length === 0 || dbotp[0].otp !== otp){
             return res.status(401).json({
@@ -251,7 +251,7 @@ export const changePassword = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error);
+       
         return res.status(401).json({
             success: false,
             message: "error while changing your password",

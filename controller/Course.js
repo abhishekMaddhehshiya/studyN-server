@@ -219,7 +219,7 @@ export const getInstructorCourses = async (req, res) => {
       data: instructorCourses,
     })
   } catch (error) {
-    console.error(error)
+   
     res.status(500).json({
       success: false,
       message: "Failed to retrieve instructor courses",
@@ -239,7 +239,7 @@ export const editCourse = async (req, res) => {
 
     // If Thumbnail Image is found, update it
     if (req.files?.thumbnailImage) {
-      console.log("thumbnail update")
+    
       const thumbnail = req.files.thumbnailImage
       const thumbnailImage = await uploadImageToCloudinary(
         thumbnail,
@@ -292,7 +292,7 @@ export const editCourse = async (req, res) => {
       data: updatedCourse,
     })
   } catch (error) {
-    console.error(error)
+   
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -335,7 +335,7 @@ export const deleteCourse = async (req, res) => {
       message: "Course deleted successfully",
     })
   } catch (error) {
-    console.error(error)
+ 
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -496,7 +496,7 @@ export const updateCourseProgress = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Course progress updated" })
   } catch (error) {
-    console.error(error)
+  
     return res.status(500).json({ success: false, message: "Internal server error" })
   }
 }
